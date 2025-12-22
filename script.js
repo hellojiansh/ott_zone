@@ -32,7 +32,7 @@ function toWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 }
 
-function createProductCard(product, index, addToCart) {
+function createProductCard(product, index, state) {
   const card = document.createElement("article");
   card.className = "product-card";
   card.dataset.category = product.cat;
@@ -129,14 +129,48 @@ function createProductCard(product, index, addToCart) {
 
   const ctaWrap = document.createElement("div");
   ctaWrap.className = "product-cta";
-  const button = document.createElement("button");
-  button.className = "btn btn-primary";
-  button.type = "button";
-  button.textContent = "Add to cart";
-  button.addEventListener("click", () => {
-    addToCart(product);
-  });
-  ctaWrap.appendChild(button);
+
+  const qty = state.getQuantity ? state.getQuantity(product.id) : 0;
+
+  if (!qty) {
+    const button = document.createElement("button");
+    button.className = "btn btn-primary";
+    button.type = "button";
+    button.textContent = "Add to cart";
+    button.addEventListener("click", () => {
+      state.addToCart(product);
+    });
+    ctaWrap.appendChild(button);
+  } else {
+    const qtyControl = document.createElement("div");
+    qtyControl.className = "qty-control";
+
+    const minus = document.createElement("button");
+    minus.type = "button";
+    minus.className = "qty-btn";
+    minus.textContent = "−";
+    minus.addEventListener("click", () => {
+      state.changeQuantity(product, -1);
+    });
+
+    const value = document.createElement("span");
+    value.className = "qty-value";
+    value.textContent = String(qty);
+
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.className = "qty-btn";
+    plus.textContent = "+";
+    plus.addEventListener("click", () => {
+      state.changeQuantity(product, 1);
+    });
+
+    qtyControl.appendChild(minus);
+    qtyControl.appendChild(value);
+    qtyControl.appendChild(plus);
+    ctaWrap.appendChild(qtyControl);
+  }
+
   card.appendChild(ctaWrap);
 
   return card;
@@ -146,40 +180,40 @@ function getDiscountPercent(product) {
   return Math.round(((product.mrp - product.price) / product.mrp) * 100);
 }
 
-function renderProducts(category = "all", search = "", sort = "default", addToCart) {
+function renderProducts(state) {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
   grid.innerHTML = "";
 
-  let items = PRODUCTS.filter(p => category === "all" || p.cat === category);
+  let items = PRODUCTS.filter(p => state.category === "all" || p.cat === state.category);
 
-  const term = search.trim().toLowerCase();
+  const term = state.search.trim().toLowerCase();
   if (term) {
     items = items.filter(p => p.title.toLowerCase().includes(term) || p.id.toLowerCase().includes(term));
   }
 
-  if (sort === "rating") {
+  if (state.sort === "rating") {
     items = [...items].sort((a, b) => b.rating - a.rating);
-  } else if (sort === "discount") {
+  } else if (state.sort === "discount") {
     items = [...items].sort((a, b) => getDiscountPercent(b) - getDiscountPercent(a));
-  } else if (sort === "price-low") {
+  } else if (state.sort === "price-low") {
     items = [...items].sort((a, b) => a.price - b.price);
   }
 
   items.forEach((product, index) => {
-    const card = createProductCard(product, index, addToCart);
+    const card = createProductCard(product, index, state);
     grid.appendChild(card);
   });
 }
 
-function setupCategoryFilters(state, addToCart) {
+function setupCategoryFilters(state) {
   const chips = document.querySelectorAll("#category-filters .chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
       chips.forEach(c => c.classList.remove("chip-active"));
       chip.classList.add("chip-active");
       state.category = chip.dataset.category || "all";
-      renderProducts(state.category, state.search, state.sort, addToCart);
+      renderProducts(state);
     });
   });
 }
@@ -224,24 +258,24 @@ function setYear() {
   }
 }
 
-function setupSortFilters(state, addToCart) {
+function setupSortFilters(state) {
   const chips = document.querySelectorAll("#sort-filters .chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
       chips.forEach(c => c.classList.remove("chip-active"));
       chip.classList.add("chip-active");
       state.sort = chip.dataset.sort || "default";
-      renderProducts(state.category, state.search, state.sort, addToCart);
+      renderProducts(state);
     });
   });
 }
 
-function setupSearch(state, addToCart) {
+function setupSearch(state) {
   const input = document.getElementById("product-search");
   if (!input) return;
   input.addEventListener("input", () => {
     state.search = input.value || "";
-    renderProducts(state.category, state.search, state.sort, addToCart);
+    renderProducts(state);
   });
 }
 
@@ -256,6 +290,11 @@ function setupCart(state) {
   const cartClear = document.getElementById("cart-clear");
 
   const cart = [];
+
+  function getQuantity(id) {
+    const item = cart.find(entry => entry.product.id === id);
+    return item ? item.quantity : 0;
+  }
 
   function updateCartBadge() {
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -310,6 +349,7 @@ function setupCart(state) {
         renderCartItems();
         updateCartBadge();
         updateCartTotal();
+        renderProducts(state);
       });
 
       right.appendChild(price);
@@ -321,17 +361,28 @@ function setupCart(state) {
     });
   }
 
-  function addToCart(product) {
+  function changeQuantity(product, delta) {
     const existing = cart.find(item => item.product.id === product.id);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
+    if (!existing && delta > 0) {
       cart.push({ product, quantity: 1 });
+    } else if (existing) {
+      existing.quantity += delta;
+      if (existing.quantity <= 0) {
+        const index = cart.indexOf(existing);
+        cart.splice(index, 1);
+      }
     }
     updateCartBadge();
     updateCartTotal();
     renderCartItems();
-    cartPanel.classList.add("cart-panel-open");
+    if (cart.length > 0) {
+      cartPanel.classList.add("cart-panel-open");
+    }
+    renderProducts(state);
+  }
+
+  function addToCart(product) {
+    changeQuantity(product, 1);
   }
 
   function buildWhatsAppMessage() {
@@ -368,9 +419,13 @@ function setupCart(state) {
     renderCartItems();
     updateCartBadge();
     updateCartTotal();
+    renderProducts(state);
   });
 
   state.addToCart = addToCart;
+  state.getQuantity = getQuantity;
+  state.changeQuantity = changeQuantity;
+
   renderCartItems();
   updateCartBadge();
   updateCartTotal();
@@ -470,14 +525,14 @@ function setupAiAssistant() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const state = { category: "all", search: "", sort: "default", addToCart: () => {} };
+  const state = { category: "all", search: "", sort: "default" };
 
   setupCart(state);
 
-  renderProducts(state.category, state.search, state.sort, state.addToCart);
-  setupCategoryFilters(state, state.addToCart);
-  setupSortFilters(state, state.addToCart);
-  setupSearch(state, state.addToCart);
+  renderProducts(state);
+  setupCategoryFilters(state);
+  setupSortFilters(state);
+  setupSearch(state);
   renderHeroTopPicks();
   setYear();
   setupAiAssistant();

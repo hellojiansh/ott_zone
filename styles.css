@@ -581,6 +581,40 @@ a {
   padding-block: 0.55rem;
 }
 
+/* quantity control on cards */
+
+.qty-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.95);
+  padding: 0.25rem 0.4rem;
+}
+
+.qty-btn {
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.qty-btn:hover {
+  background: rgba(55, 65, 81, 0.8);
+}
+
+.qty-value {
+  flex: 1;
+  text-align: center;
+  font-size: 0.86rem;
+}
+
 /* CART */
 
 .cart-button {
