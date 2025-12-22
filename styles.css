@@ -362,6 +362,53 @@ a {
   font-size: 0.95rem;
 }
 
+/* PRODUCT TOOLBAR */
+
+.product-toolbar {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-wrap {
+  flex: 1 1 230px;
+}
+
+#product-search {
+  width: 100%;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.86rem;
+  outline: none;
+  transition:
+    border-color 0.15s ease-out,
+    box-shadow 0.15s ease-out,
+    background 0.15s ease-out;
+}
+
+#product-search::placeholder {
+  color: rgba(148, 163, 184, 0.8);
+}
+
+#product-search:focus {
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.4);
+  background: rgba(15, 23, 42, 0.98);
+}
+
+.sort-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
 /* CATEGORY CHIPS */
 
 .chip-group {

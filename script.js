@@ -27,7 +27,7 @@ function toWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 }
 
-function createProductCard(product) {
+function createProductCard(product, index) {
   const card = document.createElement("article");
   card.className = "product-card";
   card.dataset.category = product.cat;
@@ -36,6 +36,18 @@ function createProductCard(product) {
   tag.className = "product-tag";
   tag.textContent = product.meta;
   card.appendChild(tag);
+
+  if (["Netflix", "prime-6m", "chatgpt-3m-shared", "chatgpt-3m-onmail"].includes(product.id)) {
+    const highlight = document.createElement("div");
+    highlight.className = "product-highlight";
+    highlight.textContent =
+      product.id === "chatgpt-3m-onmail"
+        ? "Premium Plan"
+        : index === 0
+        ? "Best Seller"
+        : "Popular";
+    card.appendChild(highlight);
+  }
 
   const header = document.createElement("div");
   header.className = "product-header";
@@ -116,35 +128,59 @@ function createProductCard(product) {
   button.className = "btn btn-whatsapp";
   button.type = "button";
   button.textContent = "Order on WhatsApp";
+  const message = `Hi, I want to order: ${product.title} (₹${product.price}). Please share payment details and delivery steps.`;
   button.addEventListener("click", () => {
-    const message = `Hi, I want to order: ${product.title} (₹${product.price}). Please share payment details and delivery steps.`;
     window.open(toWhatsAppUrl(message), "_blank", "noopener");
   });
   ctaWrap.appendChild(button);
   card.appendChild(ctaWrap);
 
+  card.addEventListener("click", event => {
+    if (event.target instanceof HTMLButtonElement) return;
+    window.open(toWhatsAppUrl(message), "_blank", "noopener");
+  });
+
   return card;
 }
 
-function renderProducts(category = "all") {
+function getDiscountPercent(product) {
+  return Math.round(((product.mrp - product.price) / product.mrp) * 100);
+}
+
+function renderProducts(category = "all", search = "", sort = "default") {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
   grid.innerHTML = "";
 
-  PRODUCTS.filter(p => category === "all" || p.cat === category).forEach(product => {
-    const card = createProductCard(product);
+  let items = PRODUCTS.filter(p => category === "all" || p.cat === category);
+
+  const term = search.trim().toLowerCase();
+  if (term) {
+    items = items.filter(p => p.title.toLowerCase().includes(term) || p.id.toLowerCase().includes(term));
+  }
+
+  if (sort === "rating") {
+    items = [...items].sort((a, b) => b.rating - a.rating);
+  } else if (sort === "discount") {
+    items = [...items].sort((a, b) => getDiscountPercent(b) - getDiscountPercent(a));
+  } else if (sort === "price-low") {
+    items = [...items].sort((a, b) => a.price - b.price);
+  }
+
+  items.forEach((product, index) => {
+    const card = createProductCard(product, index);
     grid.appendChild(card);
   });
 }
 
-function setupCategoryFilters() {
+function setupCategoryFilters(state) {
   const chips = document.querySelectorAll("#category-filters .chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
       chips.forEach(c => c.classList.remove("chip-active"));
       chip.classList.add("chip-active");
-      const category = chip.dataset.category || "all";
-      renderProducts(category);
+      state.category = chip.dataset.category || "all";
+      renderProducts(state.category, state.search, state.sort);
     });
   });
 }
@@ -189,9 +225,82 @@ function setYear() {
   }
 }
 
+function setupSortFilters(state) {
+  const chips = document.querySelectorAll("#sort-filters .chip");
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      chips.forEach(c => c.classList.remove("chip-active"));
+      chip.classList.add("chip-active");
+      state.sort = chip.dataset.sort || "default";
+      renderProducts(state.category, state.search, state.sort);
+    });
+  });
+}
+
+function setupSearch(state) {
+  const input = document.getElementById("product-search");
+  if (!input) return;
+  input.addEventListener("input", () => {
+    state.search = input.value || "";
+    renderProducts(state.category, state.search, state.sort);
+  });
+}
+
+function setupAiAssistant() {
+  const form = document.getElementById("ai-form");
+  const input = document.getElementById("ai-input");
+  const messages = document.getElementById("ai-messages");
+  if (!form || !input || !messages) return;
+
+  function appendMessage(text, from) {
+    const wrap = document.createElement("div");
+    wrap.className = `ai-message ${from === "bot" ? "ai-message-bot" : "ai-message-user"}`;
+    const p = document.createElement("p");
+    p.textContent = text;
+    wrap.appendChild(p);
+    messages.appendChild(wrap);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  async function getAssistantReply(question) {
+    const q = question.toLowerCase();
+
+    if (q.includes("time") || q.includes("timing") || q.includes("open")) {
+      return "We usually deliver and reply between 9 AM and 9 PM, Monday to Saturday. Orders outside this window are processed in the next working slot.";
+    }
+    if (q.includes("payment") || q.includes("upi") || q.includes("crypto")) {
+      return "We support UPI, bank transfer and, on request, crypto for some plans. Message on WhatsApp for exact details and current options.";
+    }
+    if (q.includes("cheap") || q.includes("lowest") || q.includes("budget")) {
+      const cheapest = [...PRODUCTS].sort((a, b) => a.price - b.price).slice(0, 3);
+      const names = cheapest.map(p => `${p.title} (₹${p.price})`).join(", ");
+      return `Some of the lowest-priced plans right now are: ${names}. For full details and availability, message us on WhatsApp.`;
+    }
+    if (q.includes("anime") || q.includes("crunchyroll")) {
+      return "For anime lovers, Crunchyroll 1 Month and 1 Year plans are great options. You can also combine them with YouTube + Google One for more value.";
+    }
+
+    return "I can help with basic questions about plans, timings and payment types. For exact offers, custom combos or any issue with access, please message directly on WhatsApp.";
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    appendMessage(value, "user");
+    input.value = "";
+    const reply = await getAssistantReply(value);
+    appendMessage(reply, "bot");
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  renderProducts("all");
-  setupCategoryFilters();
+  const state = { category: "all", search: "", sort: "default" };
+  renderProducts(state.category, state.search, state.sort);
+  setupCategoryFilters(state);
+  setupSortFilters(state);
+  setupSearch(state);
   renderHeroTopPicks();
   setYear();
+  setupAiAssistant();
 });
