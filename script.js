@@ -2,9 +2,8 @@ const WHATSAPP_NUMBER = "919088212294";
 
 // NOTE: This key is currently hardcoded for live AI responses.
 // Anyone can see and abuse it in a public repo. Be ready to rotate it if needed.
-const GOOGLE_API_KEY = "AIzaSyDr1NQiQodKYCDt7HHZOraAwdJW8j_UdNs";
-const GEMINI_MODEL = "gemini-1.5-flash";
-
+const GOOGLE_API_KEY = "AIzaSyDQokMaWBZLyi37MO1GlYVu28A8FHsexHc";
+const GEMINI_MODEL = "gemini-1.5-fla_code
 const PRODUCTS = [
   { id: "Netflix", title: "Netflix", cat: "ott", meta: "Shared", price: 149, mrp: 649, rating: 4.8, image: "netflix.png" },
   { id: "prime-6m", title: "Prime Video 6 Months", cat: "ott", meta: "On Mail", price: 149, mrp: 999, rating: 4.6, image: "prime.png" },
