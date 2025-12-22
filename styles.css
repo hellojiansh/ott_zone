@@ -434,6 +434,11 @@ a {
     color 0.18s ease-out;
 }
 
+.chip-small {
+  padding-block: 0.35rem;
+  font-size: 0.78rem;
+}
+
 .chip-active {
   background: var(--accent-soft);
   border-color: var(--accent-strong);
@@ -576,6 +581,48 @@ a {
   padding-block: 0.55rem;
 }
 
+/* HOW IT WORKS */
+
+.how-grid {
+  margin-top: 1.8rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.3rem;
+}
+
+.how-step {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(15, 23, 42, 0.92);
+  padding: 1rem 1rem 0.9rem;
+  box-shadow: var(--shadow-card);
+  font-size: 0.9rem;
+}
+
+.how-step-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  margin-bottom: 0.55rem;
+}
+
+.how-step h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.98rem;
+}
+
+.how-step p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
 /* FAQ */
 
 .faq-grid {
@@ -612,6 +659,12 @@ details p {
   align-items: start;
 }
 
+.contact-hours {
+  margin-top: 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
 .contact-card {
   border-radius: var(--radius-lg);
   border: 1px solid rgba(148, 163, 184, 0.4);
@@ -643,6 +696,128 @@ details p {
 
 .contact-actions {
   margin-top: 1.25rem;
+}
+
+/* AI SUPPORT */
+
+.ai-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.ai-copy {
+  font-size: 0.9rem;
+}
+
+.ai-hints {
+  margin: 1rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ai-hints li {
+  margin-bottom: 0.25rem;
+}
+
+.ai-chat {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: var(--shadow-card);
+  padding: 0.85rem 0.85rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+}
+
+.ai-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.ai-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+}
+
+.ai-badge {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--text-muted);
+}
+
+.ai-chat-messages {
+  max-height: 260px;
+  min-height: 140px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.ai-message {
+  margin-bottom: 0.45rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  max-width: 90%;
+}
+
+.ai-message-bot {
+  background: rgba(31, 41, 55, 0.98);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+}
+
+.ai-message-user {
+  background: rgba(34, 197, 94, 0.06);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  margin-left: auto;
+}
+
+.ai-chat-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.ai-chat-input input {
+  flex: 1;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--text);
+  padding: 0.5rem 0.8rem;
+  font-size: 0.83rem;
+  outline: none;
+}
+
+.ai-chat-input input::placeholder {
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.ai-chat-input input:focus {
+  border-color: var(--accent-strong);
+}
+
+.ai-send-btn {
+  padding-inline: 1.2rem;
+  font-size: 0.83rem;
+}
+
+.ai-note {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 /* FOOTER */
@@ -697,6 +872,10 @@ details p {
   .contact-section {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .ai-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 720px) {
@@ -706,6 +885,20 @@ details p {
 
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sort-group {
+    justify-content: flex-start;
+  }
+
+  .chip-group {
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
   }
 }
 
