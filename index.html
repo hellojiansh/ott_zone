@@ -92,14 +92,57 @@
       <div class="container">
         <h2 class="section-title">Popular Plans &amp; Services</h2>
         <p class="section-subtitle">
-          Tap any service to order directly on WhatsApp. You’ll receive complete details and delivery steps.
+          Add services to your cart, then place a single WhatsApp order with all selected plans.
         </p>
+
+        <div class="product-toolbar">
+          <div class="search-wrap">
+            <input
+              type="search"
+              id="product-search"
+              placeholder="Search Netflix, Prime, ChatGPT, etc."
+              autocomplete="off"
+            />
+          </div>
+          <div class="sort-group" id="sort-filters">
+            <button class="chip chip-small chip-active" data-sort="default">All Deals</button>
+            <button class="chip chip-small" data-sort="rating">Top Rated</button>
+            <button class="chip chip-small" data-sort="discount">Biggest Discount</button>
+            <button class="chip chip-small" data-sort="price-low">Lowest Price</button>
+          </div>
+        </div>
 
         <div id="product-grid" class="product-grid">
           <!-- Cards injected by script.js -->
         </div>
       </div>
     </section>
+
+    <div class="cart-button" id="cart-button">
+      <span class="cart-icon">🛒</span>
+      <span class="cart-label">Cart</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <div class="cart-panel" id="cart-panel">
+      <div class="cart-panel-header">
+        <h3>Your Cart</h3>
+        <button class="cart-close" id="cart-close" type="button">×</button>
+      </div>
+      <div class="cart-panel-body" id="cart-items">
+        <!-- Cart items injected by script.js -->
+      </div>
+      <div class="cart-panel-footer">
+        <div class="cart-summary">
+          <span>Total:</span>
+          <strong id="cart-total">₹0</strong>
+        </div>
+        <button class="btn btn-whatsapp cart-checkout" id="cart-checkout" type="button">
+          Checkout via WhatsApp
+        </button>
+        <button class="cart-clear" id="cart-clear" type="button">Clear cart</button>
+      </div>
+    </div>
 
     <section id="faq" class="section section-alt">
       <div class="container">

@@ -32,7 +32,7 @@ function toWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
 }
 
-function createProductCard(product, index) {
+function createProductCard(product, index, addToCart) {
   const card = document.createElement("article");
   card.className = "product-card";
   card.dataset.category = product.cat;
@@ -130,20 +130,14 @@ function createProductCard(product, index) {
   const ctaWrap = document.createElement("div");
   ctaWrap.className = "product-cta";
   const button = document.createElement("button");
-  button.className = "btn btn-whatsapp";
+  button.className = "btn btn-primary";
   button.type = "button";
-  button.textContent = "Order on WhatsApp";
-  const message = `Hi, I want to order: ${product.title} (₹${product.price}). Please share payment details and delivery steps.`;
+  button.textContent = "Add to cart";
   button.addEventListener("click", () => {
-    window.open(toWhatsAppUrl(message), "_blank", "noopener");
+    addToCart(product);
   });
   ctaWrap.appendChild(button);
   card.appendChild(ctaWrap);
-
-  card.addEventListener("click", event => {
-    if (event.target instanceof HTMLButtonElement) return;
-    window.open(toWhatsAppUrl(message), "_blank", "noopener");
-  });
 
   return card;
 }
@@ -152,7 +146,7 @@ function getDiscountPercent(product) {
   return Math.round(((product.mrp - product.price) / product.mrp) * 100);
 }
 
-function renderProducts(category = "all", search = "", sort = "default") {
+function renderProducts(category = "all", search = "", sort = "default", addToCart) {
   const grid = document.getElementById("product-grid");
   if (!grid) return;
   grid.innerHTML = "";
@@ -173,7 +167,7 @@ function renderProducts(category = "all", search = "", sort = "default") {
   }
 
   items.forEach((product, index) => {
-    const card = createProductCard(product, index);
+    const card = createProductCard(product, index, addToCart);
     grid.appendChild(card);
   });
 }
@@ -230,25 +224,156 @@ function setYear() {
   }
 }
 
-function setupSortFilters(state) {
+function setupSortFilters(state, addToCart) {
   const chips = document.querySelectorAll("#sort-filters .chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
       chips.forEach(c => c.classList.remove("chip-active"));
       chip.classList.add("chip-active");
       state.sort = chip.dataset.sort || "default";
-      renderProducts(state.category, state.search, state.sort);
+      renderProducts(state.category, state.search, state.sort, addToCart);
     });
   });
 }
 
-function setupSearch(state) {
+function setupSearch(state, addToCart) {
   const input = document.getElementById("product-search");
   if (!input) return;
   input.addEventListener("input", () => {
     state.search = input.value || "";
-    renderProducts(state.category, state.search, state.sort);
+    renderProducts(state.category, state.search, state.sort, addToCart);
   });
+}
+
+function setupCart(state) {
+  const cartButton = document.getElementById("cart-button");
+  const cartPanel = document.getElementById("cart-panel");
+  const cartClose = document.getElementById("cart-close");
+  const cartItemsEl = document.getElementById("cart-items");
+  const cartCountEl = document.getElementById("cart-count");
+  const cartTotalEl = document.getElementById("cart-total");
+  const cartCheckout = document.getElementById("cart-checkout");
+  const cartClear = document.getElementById("cart-clear");
+
+  const cart = [];
+
+  function updateCartBadge() {
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountEl.textContent = String(count);
+  }
+
+  function updateCartTotal() {
+    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    cartTotalEl.textContent = `₹${total}`;
+  }
+
+  function renderCartItems() {
+    cartItemsEl.innerHTML = "";
+    if (cart.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "cart-empty";
+      empty.textContent = "Your cart is empty. Add a few plans to place a WhatsApp order.";
+      cartItemsEl.appendChild(empty);
+      return;
+    }
+
+    cart.forEach((item, index) => {
+      const row = document.createElement("div");
+      row.className = "cart-item";
+
+      const info = document.createElement("div");
+      info.className = "cart-item-info";
+
+      const title = document.createElement("p");
+      title.className = "cart-item-title";
+      title.textContent = item.product.title;
+
+      const meta = document.createElement("p");
+      meta.className = "cart-item-meta";
+      meta.textContent = `${item.product.meta} • x${item.quantity}`;
+
+      info.appendChild(title);
+      info.appendChild(meta);
+
+      const right = document.createElement("div");
+
+      const price = document.createElement("div");
+      price.className = "cart-item-price";
+      price.textContent = `₹${item.product.price * item.quantity}`;
+
+      const remove = document.createElement("button");
+      remove.className = "cart-item-remove";
+      remove.type = "button";
+      remove.textContent = "Remove";
+      remove.addEventListener("click", () => {
+        cart.splice(index, 1);
+        renderCartItems();
+        updateCartBadge();
+        updateCartTotal();
+      });
+
+      right.appendChild(price);
+      right.appendChild(remove);
+
+      row.appendChild(info);
+      row.appendChild(right);
+      cartItemsEl.appendChild(row);
+    });
+  }
+
+  function addToCart(product) {
+    const existing = cart.find(item => item.product.id === product.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({ product, quantity: 1 });
+    }
+    updateCartBadge();
+    updateCartTotal();
+    renderCartItems();
+    cartPanel.classList.add("cart-panel-open");
+  }
+
+  function buildWhatsAppMessage() {
+    if (cart.length === 0) {
+      return "Hi, I want to know more about OTTZone plans.";
+    }
+    const lines = cart.map(
+      item => `- ${item.product.title} (₹${item.product.price} x ${item.quantity}) = ₹${
+        item.product.price * item.quantity
+      }`
+    );
+    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const header = "Hi, I want to place this order from OTTZone:\n";
+    const body = lines.join("\n");
+    const footer = `\n\nTotal: ₹${total}\nPlease share payment options and delivery steps.`;
+    return header + body + footer;
+  }
+
+  cartButton.addEventListener("click", () => {
+    cartPanel.classList.toggle("cart-panel-open");
+  });
+
+  cartClose.addEventListener("click", () => {
+    cartPanel.classList.remove("cart-panel-open");
+  });
+
+  cartCheckout.addEventListener("click", () => {
+    const message = buildWhatsAppMessage();
+    window.open(toWhatsAppUrl(message), "_blank", "noopener");
+  });
+
+  cartClear.addEventListener("click", () => {
+    cart.splice(0, cart.length);
+    renderCartItems();
+    updateCartBadge();
+    updateCartTotal();
+  });
+
+  state.addToCart = addToCart;
+  renderCartItems();
+  updateCartBadge();
+  updateCartTotal();
 }
 
 function setupAiAssistant() {
