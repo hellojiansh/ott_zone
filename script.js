@@ -447,6 +447,34 @@ function setupAiAssistant() {
     messages.scrollTop = messages.scrollHeight;
   }
 
+  function localFallbackAnswer(question) {
+    const trimmed = question.trim();
+    if (!trimmed) {
+      return "Please type a short question about OTTZone plans, timings or payment and I’ll try to help.";
+    }
+    const q = trimmed.toLowerCase();
+
+    if (q.includes("time") || q.includes("timing") || q.includes("open")) {
+      return "We usually deliver and reply between 9 AM and 9 PM, Monday to Saturday. Orders outside this window are processed in the next working slot.";
+    }
+    if (q.includes("payment") || q.includes("upi") || q.includes("crypto")) {
+      return "We support UPI, bank transfer and, on request, crypto for some plans. Message on WhatsApp for exact details and current options.";
+    }
+    if (q.includes("cheap") || q.includes("lowest") || q.includes("budget")) {
+      const cheapest = [...PRODUCTS].sort((a, b) => a.price - b.price).slice(0, 3);
+      const names = cheapest.map(p => `${p.title} (₹${p.price})`).join(", ");
+      return `Some of the lowest-priced plans right now are: ${names}. For full details and availability, message us on WhatsApp.`;
+    }
+    if (q.includes("anime") || q.includes("crunchyroll")) {
+      return "For anime lovers, Crunchyroll 1 Month and 1 Year plans are good options. You can also combine them with YouTube + Google One for more value.";
+    }
+    if (q.includes("who are you") || q.includes("who r you") || q.includes("who are u")) {
+      return "I’m the OTTZone assistant. I can help with quick questions about our plans and timings. For actual orders or payment issues, please message directly on WhatsApp.";
+    }
+
+    return "I can help with basic questions about plans, timings and payment types. For exact offers, custom combos or any issue with access, please message directly on WhatsApp.";
+  }
+
   async function getAssistantReply(question) {
     const trimmed = question.trim();
     if (!trimmed) {
@@ -454,22 +482,7 @@ function setupAiAssistant() {
     }
 
     if (!GOOGLE_API_KEY || GOOGLE_API_KEY === "YOUR_GOOGLE_API_KEY_HERE") {
-      const q = trimmed.toLowerCase();
-      if (q.includes("time") || q.includes("timing") || q.includes("open")) {
-        return "We usually deliver and reply between 9 AM and 9 PM, Monday to Saturday. Orders outside this window are processed in the next working slot.";
-      }
-      if (q.includes("payment") || q.includes("upi") || q.includes("crypto")) {
-        return "We support UPI, bank transfer and, on request, crypto for some plans. Message on WhatsApp for exact details and current options.";
-      }
-      if (q.includes("cheap") || q.includes("lowest") || q.includes("budget")) {
-        const cheapest = [...PRODUCTS].sort((a, b) => a.price - b.price).slice(0, 3);
-        const names = cheapest.map(p => `${p.title} (₹${p.price})`).join(", ");
-        return `Some of the lowest-priced plans right now are: ${names}. For full details and availability, message us on WhatsApp.`;
-      }
-      if (q.includes("anime") || q.includes("crunchyroll")) {
-        return "For anime lovers, Crunchyroll 1 Month and 1 Year plans are great options. You can also combine them with YouTube + Google One for more value.";
-      }
-      return "I can help with basic questions about plans, timings and payment types. For exact offers, custom combos or any issue with access, please message directly on WhatsApp.";
+      return localFallbackAnswer(trimmed);
     }
 
     try {
@@ -499,17 +512,17 @@ function setupAiAssistant() {
 
       if (!res.ok) {
         console.error("Gemini API error:", res.status, await res.text());
-        return "I had trouble talking to the AI service right now. Please ask basic questions, or message us directly on WhatsApp for full support.";
+        return localFallbackAnswer(trimmed);
       }
 
       const data = await res.json();
       const text =
         data?.candidates?.[0]?.content?.parts?.map(part => part.text || "").join(" ").trim() ||
-        "I couldn't generate a proper answer just now. Please message us on WhatsApp for full help.";
+        localFallbackAnswer(trimmed);
       return text;
     } catch (error) {
       console.error("Gemini request failed:", error);
-      return "I had trouble talking to the AI service right now. Please try again later or message us directly on WhatsApp.";
+      return localFallbackAnswer(trimmed);
     }
   }
 
