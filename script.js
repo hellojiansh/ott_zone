@@ -172,14 +172,14 @@ function renderProducts(category = "all", search = "", sort = "default", addToCa
   });
 }
 
-function setupCategoryFilters(state) {
+function setupCategoryFilters(state, addToCart) {
   const chips = document.querySelectorAll("#category-filters .chip");
   chips.forEach(chip => {
     chip.addEventListener("click", () => {
       chips.forEach(c => c.classList.remove("chip-active"));
       chip.classList.add("chip-active");
       state.category = chip.dataset.category || "all";
-      renderProducts(state.category, state.search, state.sort);
+      renderProducts(state.category, state.search, state.sort, addToCart);
     });
   });
 }
@@ -470,11 +470,14 @@ function setupAiAssistant() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const state = { category: "all", search: "", sort: "default" };
-  renderProducts(state.category, state.search, state.sort);
-  setupCategoryFilters(state);
-  setupSortFilters(state);
-  setupSearch(state);
+  const state = { category: "all", search: "", sort: "default", addToCart: () => {} };
+
+  setupCart(state);
+
+  renderProducts(state.category, state.search, state.sort, state.addToCart);
+  setupCategoryFilters(state, state.addToCart);
+  setupSortFilters(state, state.addToCart);
+  setupSearch(state, state.addToCart);
   renderHeroTopPicks();
   setYear();
   setupAiAssistant();
