@@ -83,6 +83,7 @@
           <button class="chip" data-category="ott">OTT</button>
           <button class="chip" data-category="storage">Storage &amp; Backup</button>
           <button class="chip" data-category="tools">Trading &amp; Tools</button>
+          <button class="chip" data-category="gift">Gift Cards</button>
           <button class="chip" data-category="other">Other Services</button>
         </div>
       </div>
@@ -133,9 +134,21 @@
         <!-- Cart items injected by script.js -->
       </div>
       <div class="cart-panel-footer">
+        <div class="coupon-row">
+          <input
+            type="text"
+            id="cart-coupon"
+            placeholder="Have a coupon? Enter here"
+            autocomplete="off"
+          />
+          <button type="button" id="cart-apply-coupon" class="coupon-apply">Apply</button>
+        </div>
         <div class="cart-summary">
           <span>Total:</span>
-          <strong id="cart-total">₹0</strong>
+          <div class="cart-summary-values">
+            <span id="cart-total">₹0</span>
+            <span id="cart-discounted" class="cart-discounted hidden"></span>
+          </div>
         </div>
         <button class="btn btn-whatsapp cart-checkout" id="cart-checkout" type="button">
           Checkout via WhatsApp

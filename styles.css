@@ -752,12 +752,63 @@ a {
   border-top: 1px solid rgba(148, 163, 184, 0.5);
 }
 
+.coupon-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+#cart-coupon {
+  flex: 1;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--text);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+#cart-coupon::placeholder {
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.coupon-apply {
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.95);
+  color: #e5e7eb;
+  font-size: 0.78rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.coupon-apply:hover {
+  border-color: rgba(209, 213, 219, 0.9);
+}
+
 .cart-summary {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 0.55rem;
   font-size: 0.86rem;
+}
+
+.cart-summary-values {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.cart-discounted {
+  font-size: 0.8rem;
+  color: #bbf7d0;
+}
+
+.hidden {
+  display: none;
 }
 
 .cart-checkout {

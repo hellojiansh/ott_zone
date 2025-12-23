@@ -23,7 +23,11 @@ const PRODUCTS = [
   { id: "canva-edu-12m", title: "Canva 1 Year EDU Plan", cat: "other", meta: "EDU Plan Invite", price: 199, mrp: 3999, rating: 4.5, image: "canva.png" },
   { id: "chatgpt-3m-onmail", title: "ChatGPT 3 Months", cat: "other", meta: "On Mail", price: 1299, mrp: 6000, rating: 4.8, image: "chatgpt.png" },
   { id: "chatgpt-3m-shared", title: "ChatGPT 3 Months", cat: "other", meta: "Shared", price: 399, mrp: 6000, rating: 4.2, image: "chatgpt.png" },
-  { id: "Surfshark", title: "Surfshark (2 Months)", cat: "other", meta: "Shared", price: 99, mrp: 2800, rating: 4.2, image: "surfshark.png" }
+  { id: "Surfshark", title: "Surfshark (2 Months)", cat: "other", meta: "Shared", price: 99, mrp: 2800, rating: 4.2, image: "surfshark.png" },
+
+  { id: "gc-ott-200", title: "OTTZone Gift Card ₹200", cat: "gift", meta: "For OTT plans", price: 200, mrp: 200, rating: 4.6, image: "giftcard.png" },
+  { id: "gc-ott-500", title: "OTTZone Gift Card ₹500", cat: "gift", meta: "For any service", price: 500, mrp: 500, rating: 4.7, image: "giftcard.png" },
+  { id: "gc-ott-1000", title: "OTTZone Gift Card ₹1000", cat: "gift", meta: "For any service", price: 1000, mrp: 1000, rating: 4.8, image: "giftcard.png" }
 ];
 
 function toWhatsAppUrl(message) {
@@ -285,10 +289,14 @@ function setupCart(state) {
   const cartItemsEl = document.getElementById("cart-items");
   const cartCountEl = document.getElementById("cart-count");
   const cartTotalEl = document.getElementById("cart-total");
+  const cartDiscountedEl = document.getElementById("cart-discounted");
   const cartCheckout = document.getElementById("cart-checkout");
   const cartClear = document.getElementById("cart-clear");
+  const cartCouponInput = document.getElementById("cart-coupon");
+  const cartApplyCoupon = document.getElementById("cart-apply-coupon");
 
   const cart = [];
+  let appliedCoupon = null;
 
   function getQuantity(id) {
     const item = cart.find(entry => entry.product.id === id);
@@ -300,9 +308,35 @@ function setupCart(state) {
     cartCountEl.textContent = String(count);
   }
 
+  function calculateTotal() {
+    return cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  }
+
+  function getCouponDiscount(total) {
+    if (!appliedCoupon) return 0;
+    const code = appliedCoupon.toLowerCase();
+    if (code === "ott10") {
+      return Math.round(total * 0.1);
+    }
+    if (code === "flat50") {
+      return total >= 200 ? 50 : 0;
+    }
+    return 0;
+  }
+
   function updateCartTotal() {
-    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const total = calculateTotal();
+    const discount = getCouponDiscount(total);
+    const finalTotal = Math.max(total - discount, 0);
+
     cartTotalEl.textContent = `₹${total}`;
+    if (discount > 0) {
+      cartDiscountedEl.textContent = `After coupon: ₹${finalTotal} (saved ₹${discount})`;
+      cartDiscountedEl.classList.remove("hidden");
+    } else {
+      cartDiscountedEl.textContent = "";
+      cartDiscountedEl.classList.add("hidden");
+    }
   }
 
   function renderCartItems() {
@@ -393,10 +427,16 @@ function setupCart(state) {
         item.product.price * item.quantity
       }`
     );
-    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const total = calculateTotal();
+    const discount = getCouponDiscount(total);
+    const finalTotal = Math.max(total - discount, 0);
     const header = "Hi, I want to place this order from OTTZone:\n";
     const body = lines.join("\n");
-    const footer = `\n\nTotal: ₹${total}\nPlease share payment options and delivery steps.`;
+    const couponLine =
+      appliedCoupon && discount > 0
+        ? `\n\nCoupon used: ${appliedCoupon.toUpperCase()} (saved ₹${discount})`
+        : "";
+    const footer = `\n\nTotal: ₹${total}${couponLine}\nPayable amount: ₹${finalTotal}\nPlease share payment options and delivery steps.`;
     return header + body + footer;
   }
 
@@ -415,11 +455,21 @@ function setupCart(state) {
 
   cartClear.addEventListener("click", () => {
     cart.splice(0, cart.length);
+    appliedCoupon = null;
+    if (cartCouponInput) cartCouponInput.value = "";
     renderCartItems();
     updateCartBadge();
     updateCartTotal();
     renderProducts(state);
   });
+
+  if (cartApplyCoupon && cartCouponInput) {
+    cartApplyCoupon.addEventListener("click", () => {
+      const code = cartCouponInput.value.trim();
+      appliedCoupon = code || null;
+      updateCartTotal();
+    });
+  }
 
   state.addToCart = addToCart;
   state.getQuantity = getQuantity;
