@@ -1,5 +1,9 @@
 const WHATSAPP_NUMBER = "919088212294";
 
+// NOTE: These keys are hardcoded for development.
+// In a real deployment, move them to a backend/service and never expose in frontend JS.
+const YOU_API_KEY = "ydc-sk-9ef3e904199a79d6-5MHpcX6g4Ewk2ZT8iKW4UvozRFv5Kjcl-b7181ebd";HATSAPP_NUMBER = "919088212294";
+
 // NOTE: This key is currently hardcoded for live AI responses.
 // Anyone can see and abuse it in a public repo. Be ready to rotate it if needed.
 const GOOGLE_API_KEY = "AIzaSyDQokMaWBZLyi37MO1GlYVu28A8FHsexHc";
@@ -530,7 +534,8 @@ function setupAiAssistant() {
       return "Please type a short question about OTTZone plans, timings or payment and I’ll try to help.";
     }
 
-    if (!GOOGLE_API_KEY || GOOGLE_API_KEY === "YOUR_GOOGLE_API_KEY_HERE") {
+    // If no external key, fall back to local logic
+    if (!YOU_API_KEY) {
       return localFallbackAnswer(trimmed);
     }
 
@@ -539,38 +544,39 @@ function setupAiAssistant() {
         "You are an assistant for OTTZone, a website that sells OTT subscriptions, storage plans and digital tools at discounted prices. " +
         "Keep answers short and clear. Always remind users that real orders and payments are handled only on WhatsApp, not inside this chat. " +
         "Support hours are 9 AM–9 PM, Monday to Saturday. Payments are usually via UPI, bank transfer and sometimes crypto. " +
-        "Do not invent prices or plans that were not mentioned; speak generally unless the question matches obvious products like Netflix, Crunchyroll, ChatGPT, Google One, Spotify, etc.";
+        "Do not invent prices or plans that were not mentioned; speak generally unless the question matches obvious products like Netflix, Crunchyroll, ChatGPT, Google One, Spotify, etc. " +
+        "Answer in one or two short sentences.";
 
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(
-          GOOGLE_API_KEY
-        )}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            contents: [
-              { role: "user", parts: [{ text: systemPrompt }] },
-              { role: "user", parts: [{ text: trimmed }] }
-            ]
-          })
-        }
-      );
+      const res = await fetch("https://api.you.com/v1/agents/runs", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${YOU_API_KEY}`,
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          agent: "express",
+          input: `${systemPrompt}\nUser: ${trimmed}`,
+          stream: false
+        })
+      });
 
       if (!res.ok) {
-        console.error("Gemini API error:", res.status, await res.text());
+        console.error("You.com Agents API error:", res.status, await res.text());
         return localFallbackAnswer(trimmed);
       }
 
       const data = await res.json();
+      // The exact shape may change; try to pull a main text field, otherwise fall back
       const text =
-        data?.candidates?.[0]?.content?.parts?.map(part => part.text || "").join(" ").trim() ||
+        data?.output_text?.[0]?.content ||
+        data?.output_text ||
+        data?.response ||
         localFallbackAnswer(trimmed);
-      return text;
+
+      return typeof text === "string" && text.trim() ? text.trim() : localFallbackAnswer(trimmed);
     } catch (error) {
-      console.error("Gemini request failed:", error);
+      console.error("You.com Agents request failed:", error);
       return localFallbackAnswer(trimmed);
     }
   }
