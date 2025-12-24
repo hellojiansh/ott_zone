@@ -1,13 +1,9 @@
 const WHATSAPP_NUMBER = "919088212294";
 
-// NOTE: These keys are hardcoded for development.
-// In a real deployment, move them to a backend/service and never expose in frontend JS.
-const YOU_API_KEY = "ydc-sk-9ef3e904199a79d6-5MHpcX6g4Ewk2ZT8iKW4UvozRFv5Kjcl-b7181ebd";HATSAPP_NUMBER = "919088212294";
+// NOTE: This key is hardcoded for development.
+// In a real deployment, move it to a backend/service and never expose in frontend JS.
+const YOU_API_KEY = "ydc-sk-9ef3e904199a79d6-5MHpcX6g4Ewk2ZT8iKW4UvozRFv5Kjcl-b7181ebd";
 
-// NOTE: This key is currently hardcoded for live AI responses.
-// Anyone can see and abuse it in a public repo. Be ready to rotate it if needed.
-const GOOGLE_API_KEY = "AIzaSyDQokMaWBZLyi37MO1GlYVu28A8FHsexHc";
-const GEMINI_MODEL = "gemini-1.5-fla_code
 const PRODUCTS = [
   { id: "Netflix", title: "Netflix", cat: "ott", meta: "Shared", price: 149, mrp: 649, rating: 4.8, image: "netflix.png" },
   { id: "prime-6m", title: "Prime Video 6 Months", cat: "ott", meta: "On Mail", price: 149, mrp: 999, rating: 4.6, image: "prime.png" },
