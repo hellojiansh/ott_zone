@@ -1,34 +1,4 @@
-const WHATSAPP_NUMBER = "919088212294";
 
-// NOTE: This key is hardcoded for development.
-// In a real deployment, move it to a backend/service and never expose in frontend JS.
-const YOU_API_KEY = "ydc-sk-9ef3e904199a79d6-5MHpcX6g4Ewk2ZT8iKW4UvozRFv5Kjcl-b7181ebd";
-
-const PRODUCTS = [
-  { id: "Netflix", title: "Netflix", cat: "ott", meta: "Shared", price: 149, mrp: 649, rating: 4.8, image: "netflix.png" },
-  { id: "prime-6m", title: "Prime Video 6 Months", cat: "ott", meta: "On Mail", price: 149, mrp: 999, rating: 4.6, image: "prime.png" },
-  { id: "crunchyroll-12m", title: "Crunchyroll 1 Year", cat: "ott", meta: "On Mail", price: 249, mrp: 999, rating: 4.7, image: "crunchyroll.png" },
-  { id: "crunchyroll-1m", title: "Crunchyroll 1 Month", cat: "ott", meta: "On Mail", price: 49, mrp: 119, rating: 4.4, image: "crunchyroll.png" },
-  { id: "hotstar-super-1m", title: "Hotstar Super 1 Month", cat: "ott", meta: "On Number", price: 69, mrp: 149, rating: 4.5, image: "hotstar.png" },
-  { id: "zee5-18m-autopay", title: "ZEE5 1.5 Year", cat: "ott", meta: "AutoPay • Full Warranty", price: 249, mrp: 1499, rating: 4.4, image: "zee5.png" },
-  { id: "sonyliv-12m", title: "SonyLiv 1 Year", cat: "ott", meta: "On Number", price: 249, mrp: 999, rating: 4.3, image: "sonyliv.png" },
-  { id: "Spotify", title: "Spotify 2 Months", cat: "ott", meta: "On Mail", price: 149, mrp: 199, rating: 4.7, image: "Spotify.png" },
-
-  { id: "yt-gone-invite-1m", title: "YouTube + Google One (2TB) 1 Month", cat: "storage", meta: "Invite", price: 59, mrp: 799, rating: 4.8, image: "youtube.png" },
-  { id: "gone-gemini-onmail-12m", title: "Google One + Gemini (2TB) 1 Year", cat: "storage", meta: "On Mail", price: 249, mrp: 2100, rating: 4.9, image: "google.png" },
-  { id: "gone-gemini-invite-12m", title: "Google One + Gemini (2TB) 1 Year", cat: "storage", meta: "Invite", price: 99, mrp: 2100, rating: 4.9, image: "google.png" },
-
-  { id: "tradingview-1m", title: "TradingView 1 Month", cat: "tools", meta: "Gmail you provide", price: 79, mrp: 249, rating: 4.4, image: "tradingview1.png" },
-
-  { id: "canva-edu-12m", title: "Canva 1 Year EDU Plan", cat: "other", meta: "EDU Plan Invite", price: 199, mrp: 3999, rating: 4.5, image: "canva.png" },
-  { id: "chatgpt-3m-onmail", title: "ChatGPT 3 Months", cat: "other", meta: "On Mail", price: 1299, mrp: 6000, rating: 4.8, image: "chatgpt.png" },
-  { id: "chatgpt-3m-shared", title: "ChatGPT 3 Months", cat: "other", meta: "Shared", price: 399, mrp: 6000, rating: 4.2, image: "chatgpt.png" },
-  { id: "Surfshark", title: "Surfshark (2 Months)", cat: "other", meta: "Shared", price: 99, mrp: 2800, rating: 4.2, image: "surfshark.png" },
-
-  { id: "gc-ott-200", title: "OTTZone Gift Card ₹200", cat: "gift", meta: "For OTT plans", price: 200, mrp: 200, rating: 4.6, image: "giftcard.png" },
-  { id: "gc-ott-500", title: "OTTZone Gift Card ₹500", cat: "gift", meta: "For any service", price: 500, mrp: 500, rating: 4.7, image: "giftcard.png" },
-  { id: "gc-ott-1000", title: "OTTZone Gift Card ₹1000", cat: "gift", meta: "For any service", price: 1000, mrp: 1000, rating: 4.8, image: "giftcard.png" }
-];
 
 function toWhatsAppUrl(message) {
   const encoded = encodeURIComponent(message);
