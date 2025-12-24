@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OTTZone - Premium OTT & Digital Services at Best Prices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="OTTZone offers affordable OTT subscriptions, storage plans, and digital tools with easy WhatsApp ordering."
+  />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="https://www.svgrepo.com/show/353655/netflix-icon.svg" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">OZ</span>
+        <span class="logo-text">OTTZone</span>
+      </div>
+      <nav class="nav">
+        <a href="#services">Services</a>
+        <a href="#categories">Categories</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a
+        class="btn btn-whatsapp header-cta"
+        href="https://wa.me/919088212294?text=Hi%2C%20I%27m%20interested%20in%20OTTZone%20services"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Order on WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>All Your Favourite OTT, Storage &amp; Tools in One Place.</h1>
+          <p>
+            OTTZone gives you genuine OTT subscriptions, storage plans and digital tools at simple, honest pricing.
+            No confusing offers, no fake screenshots – just clear plans and fast support on WhatsApp.
+          </p>
+          <div class="hero-actions">
+            <a href="#services" class="btn btn-primary">View All Plans</a>
+            <a
+              href="https://wa.me/919088212294?text=Hi%2C%20I%20want%20to%20know%20more%20about%20OTTZone%20plans"
+              class="btn btn-outline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Talk to us on WhatsApp
+            </a>
+          </div>
+          <div class="hero-meta">
+            <span>Since 2024 • OTT &amp; digital services every day</span>
+            <span>100% warranty — money back or replacement*</span>
+            <span>Clear terms on every plan</span>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-badge">Limited Time Deals</div>
+          <p class="hero-card-title">Top Picks Today</p>
+          <ul class="hero-list" id="hero-top-picks">
+            <!-- Filled by JS from product data -->
+          </ul>
+          <a href="#services" class="hero-card-footer">View all services →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">Browse by Category</h2>
+        <p class="section-subtitle">
+          Quickly jump to the type of service you need – OTT, storage, trading tools or other utilities.
+        </p>
+        <div class="chip-group" id="category-filters">
+          <button class="chip chip-active" data-category="all">All</button>
+          <button class="chip" data-category="ott">OTT</button>
+          <button class="chip" data-category="storage">Storage &amp; Backup</button>
+          <button class="chip" data-category="tools">Trading &amp; Tools</button>
+          <button class="chip" data-category="gift">Gift Cards</button>
+          <button class="chip" data-category="other">Other Services</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="container">
+        <h2 class="section-title">Popular Plans &amp; Services</h2>
+        <p class="section-subtitle">
+          Add services to your cart, then place a single WhatsApp order with all selected plans.
+        </p>
+
+        <div class="product-toolbar">
+          <div class="search-wrap">
+            <input
+              type="search"
+              id="product-search"
+              placeholder="Search Netflix, Prime, ChatGPT, etc."
+              autocomplete="off"
+            />
+          </div>
+          <div class="sort-group" id="sort-filters">
+            <button class="chip chip-small chip-active" data-sort="default">All Deals</button>
+            <button class="chip chip-small" data-sort="rating">Top Rated</button>
+            <button class="chip chip-small" data-sort="discount">Biggest Discount</button>
+            <button class="chip chip-small" data-sort="price-low">Lowest Price</button>
+          </div>
+        </div>
+
+        <div id="product-grid" class="product-grid">
+          <!-- Cards injected by script.js -->
+        </div>
+      </div>
+    </section>
+
+    <div class="cart-button" id="cart-button">
+      <span class="cart-icon">🛒</span>
+      <span class="cart-label">Cart</span>
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <div class="cart-panel" id="cart-panel">
+      <div class="cart-panel-header">
+        <h3>Your Cart</h3>
+        <button class="cart-close" id="cart-close" type="button">×</button>
+      </div>
+      <div class="cart-panel-body" id="cart-items">
+        <!-- Cart items injected by script.js -->
+      </div>
+      <div class="cart-panel-footer">
+        <div class="coupon-row">
+          <input
+            type="text"
+            id="cart-coupon"
+            placeholder="Have a coupon? Enter here"
+            autocomplete="off"
+          />
+          <button type="button" id="cart-apply-coupon" class="coupon-apply">Apply</button>
+        </div>
+        <div class="cart-summary">
+          <span>Total:</span>
+          <div class="cart-summary-values">
+            <span id="cart-total">₹0</span>
+            <span id="cart-discounted" class="cart-discounted hidden"></span>
+          </div>
+        </div>
+        <button class="btn btn-whatsapp cart-checkout" id="cart-checkout" type="button">
+          Checkout via WhatsApp
+        </button>
+        <button class="cart-clear" id="cart-clear" type="button">Clear cart</button>
+      </div>
+    </div>
+
+    <section id="faq" class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">Questions About OTTZone</h2>
+        <div class="faq-grid">
+          <details>
+            <summary>How do I place an order?</summary>
+            <p>
+              Add the plans you want to your cart and click “Checkout via WhatsApp”. You’ll see a ready-made message
+              with all selected plans. Send it to us and we’ll reply with payment details and exact delivery time.
+            </p>
+          </details>
+          <details>
+            <summary>When will I get my account or service?</summary>
+            <p>
+              Most deliveries are done within our working time window once payment is confirmed. For access shared
+              on number/mail/invite, we clearly tell you the expected time when you order.
+            </p>
+          </details>
+          <details>
+            <summary>Is my money safe?</summary>
+            <p>
+              We only list plans that we can actually deliver and support. For each plan we clearly mention whether it is
+              shared, invite-based or full warranty. If there is any issue with access, you can reach us on WhatsApp and we
+              will check and resolve as per the warranty mentioned.
+            </p>
+          </details>
+          <details>
+            <summary>What payment methods do you support?</summary>
+            <p>
+              We usually accept UPI and bank transfers, and for some orders we can also accept crypto. Exact options
+              depend on the value of the order and will be shared with you directly on WhatsApp.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container contact-section">
+        <div>
+          <h2 class="section-title">Need Help or a Custom Combo?</h2>
+          <p class="section-subtitle">
+            Not sure which plan is right for you? Tell us what you watch or use (OTT, anime, sports, work tools)
+            and your budget – we’ll suggest a simple combo that makes sense, not just the most expensive one.
+          </p>
+          <div class="contact-actions">
+            <a
+              href="https://wa.me/919088212294?text=Hi%2C%20I%20need%20help%20choosing%20the%20right%20OTTZone%20plan"
+              class="btn btn-whatsapp btn-large"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Chat with OTTZone on WhatsApp
+            </a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <h3>Quick Details</h3>
+          <ul>
+            <li><strong>Brand:</strong> OTTZone</li>
+            <li><strong>Website:</strong> <a href="https://ottzone.in" target="_blank" rel="noopener noreferrer">ottzone.in</a></li>
+            <li><strong>Primary contact:</strong> WhatsApp (+91 90882 12294)</li>
+          </ul>
+          <p class="contact-note">
+            We keep all communication on WhatsApp so there is a clear chat history of your order, payment and support.
+            Always write from the same number so we can recognise you quickly.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> OTTZone. All rights reserved.</p>
+      <p class="footer-note">
+        *Warranty, refund or replacement terms can vary for each item. Please check the plan details before ordering.
+        OTTZone is an independent service provider and is not affiliated with or endorsed by the brands listed.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
