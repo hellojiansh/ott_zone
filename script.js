@@ -1,5 +1,37 @@
 
 
+const WHATSAPP_NUMBER = "919088212294";
+
+// NOTE: This key is hardcoded for development.
+// In a real deployment, move it to a backend/service and never expose it in frontend JS.
+const YOU_API_KEY = "ydc-sk-9ef3e904199a79d6-5MHpcX6g4Ewk2ZT8iKW4UvozRFv5Kjcl-b7181ebd";
+
+const PRODUCTS = [
+  { id: "Netflix", title: "Netflix", cat: "ott", meta: "Shared", price: 149, mrp: 649, rating: 4.8, image: "netflix.png" },
+  { id: "prime-6m", title: "Prime Video 6 Months", cat: "ott", meta: "On Mail", price: 149, mrp: 999, rating: 4.6, image: "prime.png" },
+  { id: "crunchyroll-12m", title: "Crunchyroll 1 Year", cat: "ott", meta: "On Mail", price: 249, mrp: 999, rating: 4.7, image: "crunchyroll.png" },
+  { id: "crunchyroll-1m", title: "Crunchyroll 1 Month", cat: "ott", meta: "On Mail", price: 49, mrp: 119, rating: 4.4, image: "crunchyroll.png" },
+  { id: "hotstar-super-1m", title: "Hotstar Super 1 Month", cat: "ott", meta: "On Number", price: 69, mrp: 149, rating: 4.5, image: "hotstar.png" },
+  { id: "zee5-18m-autopay", title: "ZEE5 1.5 Year", cat: "ott", meta: "AutoPay • Full Warranty", price: 249, mrp: 1499, rating: 4.4, image: "zee5.png" },
+  { id: "sonyliv-12m", title: "SonyLiv 1 Year", cat: "ott", meta: "On Number", price: 249, mrp: 999, rating: 4.3, image: "sonyliv.png" },
+  { id: "Spotify", title: "Spotify 2 Months", cat: "ott", meta: "On Mail", price: 149, mrp: 199, rating: 4.7, image: "Spotify.png" },
+
+  { id: "yt-gone-invite-1m", title: "YouTube + Google One (2TB) 1 Month", cat: "storage", meta: "Invite", price: 59, mrp: 799, rating: 4.8, image: "youtube.png" },
+  { id: "gone-gemini-onmail-12m", title: "Google One + Gemini (2TB) 1 Year", cat: "storage", meta: "On Mail", price: 249, mrp: 2100, rating: 4.9, image: "google.png" },
+  { id: "gone-gemini-invite-12m", title: "Google One + Gemini (2TB) 1 Year", cat: "storage", meta: "Invite", price: 99, mrp: 2100, rating: 4.9, image: "google.png" },
+
+  { id: "tradingview-1m", title: "TradingView 1 Month", cat: "tools", meta: "Gmail you provide", price: 79, mrp: 249, rating: 4.4, image: "tradingview1.png" },
+
+  { id: "canva-edu-12m", title: "Canva 1 Year EDU Plan", cat: "other", meta: "EDU Plan Invite", price: 199, mrp: 3999, rating: 4.5, image: "canva.png" },
+  { id: "chatgpt-3m-onmail", title: "ChatGPT 3 Months", cat: "other", meta: "On Mail", price: 1299, mrp: 6000, rating: 4.8, image: "chatgpt.png" },
+  { id: "chatgpt-3m-shared", title: "ChatGPT 3 Months", cat: "other", meta: "Shared", price: 399, mrp: 6000, rating: 4.2, image: "chatgpt.png" },
+  { id: "Surfshark", title: "Surfshark (2 Months)", cat: "other", meta: "Shared", price: 99, mrp: 2800, rating: 4.2, image: "surfshark.png" },
+
+  { id: "gc-ott-200", title: "OTTZone Gift Card ₹200", cat: "gift", meta: "For OTT plans", price: 200, mrp: 200, rating: 4.6, image: "giftcard.png" },
+  { id: "gc-ott-500", title: "OTTZone Gift Card ₹500", cat: "gift", meta: "For any service", price: 500, mrp: 500, rating: 4.7, image: "giftcard.png" },
+  { id: "gc-ott-1000", title: "OTTZone Gift Card ₹1000", cat: "gift", meta: "For any service", price: 1000, mrp: 1000, rating: 4.8, image: "giftcard.png" }
+];
+
 function toWhatsAppUrl(message) {
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
@@ -95,6 +127,7 @@ function createProductCard(product, index, state) {
   if (product.cat === "ott") cat.textContent = "OTT";
   else if (product.cat === "storage") cat.textContent = "Storage";
   else if (product.cat === "tools") cat.textContent = "Tools";
+  else if (product.cat === "gift") cat.textContent = "Gift Card";
   else cat.textContent = "Other";
 
   chipRow.appendChild(cat);
@@ -167,6 +200,408 @@ function renderProducts(state) {
 
   if (state.sort === "rating") {
     items = [...items].sort((a, b) => b.rating - a.rating);
+  } else if (state.sort === "discount") {
+    items = [...items].sort((a, b) => getDiscountPercent(b) - getDiscountPercent(a));
+  } else if (state.sort === "price-low") {
+    items = [...items].sort((a, b) => a.price - b.price);
+  }
+
+  items.forEach((product, index) => {
+    const card = createProductCard(product, index, state);
+    grid.appendChild(card);
+  });
+}
+
+function setupCategoryFilters(state) {
+  const chips = document.querySelectorAll("#category-filters .chip");
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      chips.forEach(c => c.classList.remove("chip-active"));
+      chip.classList.add("chip-active");
+      state.category = chip.dataset.category || "all";
+      renderProducts(state);
+    });
+  });
+}
+
+function renderHeroTopPicks() {
+  const list = document.getElementById("hero-top-picks");
+  if (!list) return;
+
+  const top = [...PRODUCTS]
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 3);
+
+  top.forEach(product => {
+    const li = document.createElement("li");
+
+    const name = document.createElement("span");
+    name.textContent = product.title;
+
+    const meta = document.createElement("span");
+    meta.textContent = product.meta;
+
+    const price = document.createElement("span");
+    price.className = "price-tag";
+    price.textContent = `₹${product.price}`;
+
+    li.appendChild(name);
+    li.appendChild(meta);
+    li.appendChild(price);
+    li.addEventListener("click", () => {
+      const message = `Hi, I'm interested in ${product.title} (₹${product.price}). Is it available?`;
+      window.open(toWhatsAppUrl(message), "_blank", "noopener");
+    });
+
+    list.appendChild(li);
+  });
+}
+
+function setYear() {
+  const el = document.getElementById("year");
+  if (el) {
+    el.textContent = String(new Date().getFullYear());
+  }
+}
+
+function setupSortFilters(state) {
+  const chips = document.querySelectorAll("#sort-filters .chip");
+  chips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      chips.forEach(c => c.classList.remove("chip-active"));
+      chip.classList.add("chip-active");
+      state.sort = chip.dataset.sort || "default";
+      renderProducts(state);
+    });
+  });
+}
+
+function setupSearch(state) {
+  const input = document.getElementById("product-search");
+  if (!input) return;
+  input.addEventListener("input", () => {
+    state.search = input.value || "";
+    renderProducts(state);
+  });
+}
+
+function setupCart(state) {
+  const cartButton = document.getElementById("cart-button");
+  const cartPanel = document.getElementById("cart-panel");
+  const cartClose = document.getElementById("cart-close");
+  const cartItemsEl = document.getElementById("cart-items");
+  const cartCountEl = document.getElementById("cart-count");
+  const cartTotalEl = document.getElementById("cart-total");
+  const cartDiscountedEl = document.getElementById("cart-discounted");
+  const cartCheckout = document.getElementById("cart-checkout");
+  const cartClear = document.getElementById("cart-clear");
+  const cartCouponInput = document.getElementById("cart-coupon");
+  const cartApplyCoupon = document.getElementById("cart-apply-coupon");
+
+  const cart = [];
+  let appliedCoupon = null;
+
+  function getQuantity(id) {
+    const item = cart.find(entry => entry.product.id === id);
+    return item ? item.quantity : 0;
+  }
+
+  function updateCartBadge() {
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountEl.textContent = String(count);
+  }
+
+  function calculateTotal() {
+    return cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  }
+
+  function getCouponDiscount(total) {
+    if (!appliedCoupon) return 0;
+    const code = appliedCoupon.toLowerCase();
+    if (code === "ott10") {
+      return Math.round(total * 0.1);
+    }
+    if (code === "flat50") {
+      return total >= 200 ? 50 : 0;
+    }
+    return 0;
+  }
+
+  function updateCartTotal() {
+    const total = calculateTotal();
+    const discount = getCouponDiscount(total);
+    const finalTotal = Math.max(total - discount, 0);
+
+    cartTotalEl.textContent = `₹${total}`;
+    if (discount > 0) {
+      cartDiscountedEl.textContent = `After coupon: ₹${finalTotal} (saved ₹${discount})`;
+      cartDiscountedEl.classList.remove("hidden");
+    } else {
+      cartDiscountedEl.textContent = "";
+      cartDiscountedEl.classList.add("hidden");
+    }
+  }
+
+  function renderCartItems() {
+    cartItemsEl.innerHTML = "";
+    if (cart.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "cart-empty";
+      empty.textContent = "Your cart is empty. Add a few plans to place a WhatsApp order.";
+      cartItemsEl.appendChild(empty);
+      return;
+    }
+
+    cart.forEach((item, index) => {
+      const row = document.createElement("div");
+      row.className = "cart-item";
+
+      const info = document.createElement("div");
+      info.className = "cart-item-info";
+
+      const title = document.createElement("p");
+      title.className = "cart-item-title";
+      title.textContent = item.product.title;
+
+      const meta = document.createElement("p");
+      meta.className = "cart-item-meta";
+      meta.textContent = `${item.product.meta} • x${item.quantity}`;
+
+      info.appendChild(title);
+      info.appendChild(meta);
+
+      const right = document.createElement("div");
+
+      const price = document.createElement("div");
+      price.className = "cart-item-price";
+      price.textContent = `₹${item.product.price * item.quantity}`;
+
+      const remove = document.createElement("button");
+      remove.className = "cart-item-remove";
+      remove.type = "button";
+      remove.textContent = "Remove";
+      remove.addEventListener("click", () => {
+        cart.splice(index, 1);
+        renderCartItems();
+        updateCartBadge();
+        updateCartTotal();
+        renderProducts(state);
+      });
+
+      right.appendChild(price);
+      right.appendChild(remove);
+
+      row.appendChild(info);
+      row.appendChild(right);
+      cartItemsEl.appendChild(row);
+    });
+  }
+
+  function changeQuantity(product, delta) {
+    const existing = cart.find(item => item.product.id === product.id);
+    if (!existing && delta > 0) {
+      cart.push({ product, quantity: 1 });
+    } else if (existing) {
+      existing.quantity += delta;
+      if (existing.quantity <= 0) {
+        const index = cart.indexOf(existing);
+        cart.splice(index, 1);
+      }
+    }
+    updateCartBadge();
+    updateCartTotal();
+    renderCartItems();
+    if (cart.length > 0) {
+      cartPanel.classList.add("cart-panel-open");
+    }
+    renderProducts(state);
+  }
+
+  function addToCart(product) {
+    changeQuantity(product, 1);
+  }
+
+  function buildWhatsAppMessage() {
+    if (cart.length === 0) {
+      return "Hi, I want to know more about OTTZone plans.";
+    }
+    const lines = cart.map(
+      item => `- ${item.product.title} (₹${item.product.price} x ${item.quantity}) = ₹${
+        item.product.price * item.quantity
+      }`
+    );
+    const total = calculateTotal();
+    const discount = getCouponDiscount(total);
+    const finalTotal = Math.max(total - discount, 0);
+    const header = "Hi, I want to place this order from OTTZone:\n";
+    const body = lines.join("\n");
+    const couponLine =
+      appliedCoupon && discount > 0
+        ? `\n\nCoupon used: ${appliedCoupon.toUpperCase()} (saved ₹${discount})`
+        : "";
+    const footer = `\n\nTotal: ₹${total}${couponLine}\nPayable amount: ₹${finalTotal}\nPlease share payment options and delivery steps.`;
+    return header + body + footer;
+  }
+
+  cartButton.addEventListener("click", () => {
+    cartPanel.classList.toggle("cart-panel-open");
+  });
+
+  cartClose.addEventListener("click", () => {
+    cartPanel.classList.remove("cart-panel-open");
+  });
+
+  cartCheckout.addEventListener("click", () => {
+    const message = buildWhatsAppMessage();
+    window.open(toWhatsAppUrl(message), "_blank", "noopener");
+  });
+
+  cartClear.addEventListener("click", () => {
+    cart.splice(0, cart.length);
+    appliedCoupon = null;
+    if (cartCouponInput) cartCouponInput.value = "";
+    renderCartItems();
+    updateCartBadge();
+    updateCartTotal();
+    renderProducts(state);
+  });
+
+  if (cartApplyCoupon && cartCouponInput) {
+    cartApplyCoupon.addEventListener("click", () => {
+      const code = cartCouponInput.value.trim();
+      appliedCoupon = code || null;
+      updateCartTotal();
+    });
+  }
+
+  state.addToCart = addToCart;
+  state.getQuantity = getQuantity;
+  state.changeQuantity = changeQuantity;
+
+  renderCartItems();
+  updateCartBadge();
+  updateCartTotal();
+}
+
+function setupAiAssistant() {
+  const form = document.getElementById("ai-form");
+  const input = document.getElementById("ai-input");
+  const messages = document.getElementById("ai-messages");
+  if (!form || !input || !messages) return;
+
+  function appendMessage(text, from) {
+    const wrap = document.createElement("div");
+    wrap.className = `ai-message ${from === "bot" ? "ai-message-bot" : "ai-message-user"}`;
+    const p = document.createElement("p");
+    p.textContent = text;
+    wrap.appendChild(p);
+    messages.appendChild(wrap);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function localFallbackAnswer(question) {
+    const trimmed = question.trim();
+    if (!trimmed) {
+      return "Please type a short question about OTTZone plans, timings or payment and I’ll try to help.";
+    }
+    const q = trimmed.toLowerCase();
+
+    if (q.includes("time") || q.includes("timing") || q.includes("open")) {
+      return "We usually deliver and reply between 9 AM and 9 PM, Monday to Saturday. Orders outside this window are processed in the next working slot.";
+    }
+    if (q.includes("payment") || q.includes("upi") || q.includes("crypto")) {
+      return "We support UPI, bank transfer and, on request, crypto for some plans. Message on WhatsApp for exact details and current options.";
+    }
+    if (q.includes("cheap") || q.includes("lowest") || q.includes("budget")) {
+      const cheapest = [...PRODUCTS].sort((a, b) => a.price - b.price).slice(0, 3);
+      const names = cheapest.map(p => `${p.title} (₹${p.price})`).join(", ");
+      return `Some of the lowest-priced plans right now are: ${names}. For full details and availability, message us on WhatsApp.`;
+    }
+    if (q.includes("anime") || q.includes("crunchyroll")) {
+      return "For anime lovers, Crunchyroll 1 Month and 1 Year plans are good options. You can also combine them with YouTube + Google One for more value.";
+    }
+    if (q.includes("who are you") || q.includes("who r you") || q.includes("who are u")) {
+      return "I’m the OTTZone assistant. I can help with quick questions about our plans and timings. For actual orders or payment issues, please message directly on WhatsApp.";
+    }
+
+    return "I can help with basic questions about plans, timings and payment types. For exact offers, custom combos or any issue with access, please message directly on WhatsApp.";
+  }
+
+  async function getAssistantReply(question) {
+    const trimmed = question.trim();
+    if (!trimmed) {
+      return "Please type a short question about OTTZone plans, timings or payment and I’ll try to help.";
+    }
+
+    if (!YOU_API_KEY) {
+      return localFallbackAnswer(trimmed);
+    }
+
+    try {
+      const systemPrompt =
+        "You are an assistant for OTTZone, a website that sells OTT subscriptions, storage plans and digital tools at discounted prices. " +
+        "Keep answers short and clear. Always remind users that real orders and payments are handled only on WhatsApp, not inside this chat. " +
+        "Support hours are 9 AM–9 PM, Monday to Saturday. Payments are usually via UPI, bank transfer and sometimes crypto. " +
+        "Do not invent prices or plans that were not mentioned; speak generally unless the question matches obvious products like Netflix, Crunchyroll, ChatGPT, Google One, Spotify, etc. " +
+        "Answer in one or two short sentences.";
+
+      const res = await fetch("https://api.you.com/v1/agents/runs", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${YOU_API_KEY}`,
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          agent: "express",
+          input: `${systemPrompt}\nUser: ${trimmed}`,
+          stream: false
+        })
+      });
+
+      if (!res.ok) {
+        console.error("You.com Agents API error:", res.status, await res.text());
+        return localFallbackAnswer(trimmed);
+      }
+
+      const data = await res.json();
+      const text =
+        data?.output_text?.[0]?.content ||
+        data?.output_text ||
+        data?.response ||
+        localFallbackAnswer(trimmed);
+
+      return typeof text === "string" && text.trim() ? text.trim() : localFallbackAnswer(trimmed);
+    } catch (error) {
+      console.error("You.com Agents request failed:", error);
+      return localFallbackAnswer(trimmed);
+    }
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    appendMessage(value, "user");
+    input.value = "";
+    const reply = await getAssistantReply(value);
+    appendMessage(reply, "bot");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const state = { category: "all", search: "", sort: "default" };
+
+  setupCart(state);
+
+  renderProducts(state);
+  setupCategoryFilters(state);
+  setupSortFilters(state);
+  setupSearch(state);
+  renderHeroTopPicks();
+  setYear();
+  setupAiAssistant();
+});items].sort((a, b) => b.rating - a.rating);
   } else if (state.sort === "discount") {
     items = [...items].sort((a, b) => getDiscountPercent(b) - getDiscountPercent(a));
   } else if (state.sort === "price-low") {
