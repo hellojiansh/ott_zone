@@ -126,17 +126,19 @@ body.hs-body {
 
 .hs-logo-prefix {
   color: var(--hs-text-muted);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
 }
 
-.hs-logo-main {
-  color: #e5e7eb;
-}
-
+.hs-logo-main,
 .hs-logo-highlight {
-  background: linear-gradient(90deg, var(--hs-accent-cyan), var(--hs-accent-purple));
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: linear-gradient(90deg, #22d3ee, #4f46e5, #a855f7);
   -webkit-background-clip: text;
   color: transparent;
+  font-weight: 700;
 }
 
 .hs-nav {
@@ -477,7 +479,11 @@ body.hs-body {
 }
 
 .hs-section-title {
-  font-size: 1.4rem;
+  font-size: 1.9rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #e5f2ff, #38bdf8, #a855f7);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .hs-section-pill {
@@ -497,17 +503,19 @@ body.hs-body {
 .hs-services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
+  gap: 22px;
 }
 
 .hs-card {
   border-radius: 18px;
   padding: 16px 16px 14px;
   background:
-    radial-gradient(circle at top, rgba(0, 245, 255, 0.13), transparent 55%),
-    var(--hs-bg-card);
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  box-shadow: var(--hs-shadow-strong);
+    linear-gradient(145deg, #050812, #020409),
+    radial-gradient(circle at top, rgba(0, 245, 255, 0.15), transparent 60%);
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(15, 23, 42, 0.95);
   position: relative;
   overflow: hidden;
 }
@@ -550,6 +558,7 @@ body.hs-body {
   font-size: 0.9rem;
   color: #e5e7eb;
   margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .hs-card-text--muted {
@@ -636,8 +645,13 @@ body.hs-body {
 .hs-payment-card {
   border-radius: 18px;
   padding: 18px 16px 16px;
-  background: rgba(15, 23, 42, 0.98);
-  border: 1px solid rgba(148, 163, 184, 0.4);
+  background:
+    linear-gradient(145deg, #050812, #020409),
+    radial-gradient(circle at top, rgba(0, 245, 255, 0.12), transparent 60%);
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(15, 23, 42, 0.95);
 }
 
 /* T&C layout */
@@ -679,15 +693,15 @@ body.hs-body {
 }
 
 .hs-terms-heading {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #e5e7eb;
   margin-bottom: 8px;
   border-radius: 12px;
   padding: 6px 10px;
-  background: linear-gradient(90deg, rgba(37, 99, 235, 0.35), rgba(124, 58, 237, 0.35));
-  border: 1px solid rgba(59, 130, 246, 0.5);
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.55), rgba(124, 58, 237, 0.55));
+  border: 1px solid rgba(59, 130, 246, 0.85);
 }
 
 .hs-terms-heading--refund {
@@ -712,8 +726,9 @@ body.hs-body {
 .hs-terms-list li {
   border-radius: 10px;
   padding: 8px 10px;
-  background: rgba(15, 23, 42, 0.96);
-  border: 1px solid rgba(55, 65, 81, 0.9);
+  background:
+    linear-gradient(145deg, #050812, #020409);
+  border: 1px solid rgba(15, 23, 42, 0.95);
   font-size: 0.88rem;
 }
 
