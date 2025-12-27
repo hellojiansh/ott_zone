@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign In - IN OTT ZONE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="hs-body">
+  <div class="hs-bg-grid"></div>
+  <div class="hs-particles">
+    <span class="hs-particle hs-p1"></span>
+    <span class="hs-particle hs-p2"></span>
+    <span class="hs-particle hs-p3"></span>
+    <span class="hs-particle hs-p4"></span>
+    <span class="hs-particle hs-p5"></span>
+  </div>
+
+  <main class="hs-auth-main">
+    <div class="hs-auth-wrapper">
+      <a href="index.html" class="hs-back-link">
+        <span class="hs-back-icon">←</span>
+        <span>Back to Home</span>
+      </a>
+
+      <section class="hs-auth-card">
+        <div class="hs-auth-card-inner">
+          <div class="hs-auth-brand">
+            IN <span>OTT</span> ZONE
+          </div>
+          <h1 class="hs-auth-title">Welcome Back</h1>
+          <p class="hs-auth-subtitle">
+            Login with your email or username to continue.
+          </p>
+
+          <form
+            class="hs-auth-form"
+            onsubmit="event.preventDefault(); fakeLogin();"
+          >
+            <div class="hs-form-group">
+              <label class="hs-form-label" for="email">Email or Username</label>
+              <div class="hs-input-wrapper">
+                <span class="hs-input-icon-left">👤</span>
+                <input
+                  id="email"
+                  type="text"
+                  class="hs-input hs-input--pill"
+                  placeholder="your@email.com or username"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label class="hs-form-label" for="password">Password</label>
+              <div class="hs-input-wrapper">
+                <span class="hs-input-icon-left">🔒</span>
+                <input
+                  id="password"
+                  type="password"
+                  class="hs-input hs-input--pill"
+                  placeholder="••••••••"
+                  required
+                />
+                <span
+                  class="hs-password-toggle"
+                  id="togglePassword"
+                  onclick="togglePasswordVisibility()"
+                >
+                  Show
+                </span>
+              </div>
+            </div>
+
+            <div class="hs-forgot-row">
+              <a href="#" class="hs-link-accent">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="hs-button hs-button--primary hs-button--block">
+              Login
+            </button>
+
+            <p class="hs-auth-footer-text">
+              Don't have an account?
+              <a href="#" class="hs-link-accent">Sign up</a>
+            </p>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function togglePasswordVisibility() {
+      const input = document.getElementById("password");
+      const toggle = document.getElementById("togglePassword");
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      toggle.textContent = isPassword ? "Hide" : "Show";
+    }
+
+    function fakeLogin() {
+      const email = document.getElementById("email").value;
+      alert("Login clicked for: " + email + "\\n(Backend auth to be added later.)");
+    }
+  </script>
+</body>
+</html>
