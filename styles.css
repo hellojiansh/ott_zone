@@ -625,6 +625,161 @@ body.hs-body {
   border: 1px solid rgba(148, 163, 184, 0.4);
 }
 
+/* T&C layout */
+.hs-terms-card {
+  max-width: 900px;
+  margin: 0 auto 32px;
+}
+
+.hs-terms-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.hs-terms-stat {
+  border-radius: 14px;
+  padding: 10px 12px;
+  background:
+    radial-gradient(circle at top, rgba(0, 245, 255, 0.12), transparent 60%),
+    rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.75);
+}
+
+.hs-terms-stat-title {
+  font-size: 0.85rem;
+  color: var(--hs-text-muted);
+}
+
+.hs-terms-stat-value {
+  font-size: 0.92rem;
+  margin-top: 2px;
+}
+
+/* T&C sections and list */
+.hs-terms-section {
+  margin-top: 16px;
+}
+
+.hs-terms-heading {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e5e7eb;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  padding: 6px 10px;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.35), rgba(124, 58, 237, 0.35));
+  border: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+.hs-terms-heading--refund {
+  background: linear-gradient(90deg, rgba(248, 113, 113, 0.38), rgba(251, 113, 133, 0.4));
+  border-color: rgba(248, 113, 113, 0.8);
+}
+
+.hs-terms-heading--amazon {
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.4), rgba(56, 189, 248, 0.4));
+  border-color: rgba(56, 189, 248, 0.85);
+}
+
+.hs-terms-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hs-terms-list li {
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  font-size: 0.88rem;
+}
+
+/* refund policy boxes */
+.hs-terms-refund-card {
+  margin-top: 8px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+}
+
+.hs-terms-refund-title {
+  font-size: 0.95rem;
+}
+
+.hs-terms-refund-subtitle {
+  font-size: 0.85rem;
+  color: var(--hs-text-muted);
+  margin-top: 2px;
+}
+
+.hs-terms-refund-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.hs-terms-refund-box {
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+}
+
+.hs-terms-refund-box--primary {
+  background:
+    radial-gradient(circle at top, rgba(248, 113, 113, 0.3), transparent 65%),
+    rgba(15, 23, 42, 0.98);
+  border-color: rgba(248, 113, 113, 0.9);
+}
+
+.hs-terms-refund-box--success {
+  background:
+    radial-gradient(circle at top, rgba(34, 197, 94, 0.3), transparent 65%),
+    rgba(15, 23, 42, 0.98);
+  border-color: rgba(34, 197, 94, 0.9);
+}
+
+.hs-terms-refund-percent {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.hs-terms-refund-text {
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+/* Amazon refund box */
+.hs-terms-amazon-card {
+  margin-top: 10px;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background:
+    radial-gradient(circle at top, rgba(37, 99, 235, 0.25), transparent 65%),
+    rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(59, 130, 246, 0.85);
+}
+
+.hs-terms-footer {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.hs-terms-updated {
+  margin-top: 4px;
+  font-size: 0.8rem;
+}
+
 /* shared payment card header with icon */
 .hs-payment-card-header {
   display: flex;
