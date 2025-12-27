@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sign In - IN OTT ZONE</title>
+  <title>Sign Up - IN OTT ZONE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -28,61 +28,64 @@
           <div class="hs-auth-brand">
             IN <span>OTT</span> ZONE
           </div>
-          <h1 class="hs-auth-title">Welcome Back</h1>
+          <h1 class="hs-auth-title">Create Account</h1>
           <p class="hs-auth-subtitle">
-            Login with your email or username to continue.
+            Sign up to access all deals and manage your orders.
           </p>
 
           <form
             class="hs-auth-form"
-            onsubmit="event.preventDefault(); fakeLogin();"
+            onsubmit="event.preventDefault(); fakeSignup();"
           >
             <div class="hs-form-group">
-              <label class="hs-form-label" for="email">Email or Username</label>
+              <label class="hs-form-label" for="name">Full Name</label>
               <div class="hs-input-wrapper">
-                <span class="hs-input-icon-left">👤</span>
+                <span class="hs-input-icon-left">🧑</span>
                 <input
-                  id="email"
+                  id="name"
                   type="text"
                   class="hs-input hs-input--pill"
-                  placeholder="your@email.com or username"
+                  placeholder="Your full name"
                   required
                 />
               </div>
             </div>
 
             <div class="hs-form-group">
-              <label class="hs-form-label" for="password">Password</label>
+              <label class="hs-form-label" for="signupEmail">Email</label>
+              <div class="hs-input-wrapper">
+                <span class="hs-input-icon-left">📧</span>
+                <input
+                  id="signupEmail"
+                  type="email"
+                  class="hs-input hs-input--pill"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label class="hs-form-label" for="signupPassword">Password</label>
               <div class="hs-input-wrapper">
                 <span class="hs-input-icon-left">🔒</span>
                 <input
-                  id="password"
+                  id="signupPassword"
                   type="password"
                   class="hs-input hs-input--pill"
-                  placeholder="••••••••"
+                  placeholder="Create a password"
                   required
                 />
-                <span
-                  class="hs-password-toggle"
-                  id="togglePassword"
-                  onclick="togglePasswordVisibility()"
-                >
-                  Show
-                </span>
               </div>
             </div>
 
-            <div class="hs-forgot-row">
-              <a href="#" class="hs-link-accent">Forgot Password?</a>
-            </div>
-
             <button type="submit" class="hs-button hs-button--primary hs-button--block">
-              Login
+              Create Account
             </button>
 
             <p class="hs-auth-footer-text">
-              <span>Don't have an account?</span>
-              <a href="signup.html" class="hs-link-accent">Sign up</a>
+              <span>Already have an account?</span>
+              <a href="signin.html" class="hs-link-accent">Sign in</a>
             </p>
           </form>
         </div>
@@ -91,17 +94,9 @@
   </main>
 
   <script>
-    function togglePasswordVisibility() {
-      const input = document.getElementById("password");
-      const toggle = document.getElementById("togglePassword");
-      const isPassword = input.type === "password";
-      input.type = isPassword ? "text" : "password";
-      toggle.textContent = isPassword ? "Hide" : "Show";
-    }
-
-    function fakeLogin() {
-      const email = document.getElementById("email").value;
-      alert("Login clicked for: " + email + "\\n(Backend auth to be added later.)");
+    function fakeSignup() {
+      const email = document.getElementById("signupEmail").value;
+      alert("Sign up clicked for: " + email + "\\nHook this into your auth later.");
     }
   </script>
 </body>

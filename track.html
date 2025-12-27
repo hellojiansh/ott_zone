@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Track Your Order - IN OTT ZONE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="hs-body">
+  <div class="hs-bg-grid"></div>
+  <div class="hs-particles">
+    <span class="hs-particle hs-p1"></span>
+    <span class="hs-particle hs-p2"></span>
+    <span class="hs-particle hs-p3"></span>
+    <span class="hs-particle hs-p4"></span>
+    <span class="hs-particle hs-p5"></span>
+  </div>
+
+  <header class="hs-header">
+    <div class="hs-header-inner">
+      <div class="hs-logo">
+        <span class="hs-logo-prefix">IN</span>
+        <span class="hs-logo-main">OTT</span>
+        <span class="hs-logo-highlight">ZONE</span>
+      </div>
+      <nav class="hs-nav">
+        <a href="index.html" class="hs-nav-link">Home</a>
+        <a href="services.html" class="hs-nav-link">Services</a>
+        <a href="payment.html" class="hs-nav-link">Payment</a>
+        <a href="track.html" class="hs-nav-link hs-nav-link--active">Track Order</a>
+        <a href="terms.html" class="hs-nav-link">T&amp;C</a>
+      </nav>
+      <div class="hs-header-actions">
+        <button class="hs-icon-button" aria-label="Notifications">🔔</button>
+        <button class="hs-icon-button" aria-label="Messages">📩</button>
+        <a href="signin.html" class="hs-button hs-button--ghost">Sign In</a>
+        <a href="services.html" class="hs-button hs-button--primary">Browse</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="hs-main">
+    <section class="hs-section">
+      <div class="hs-section-header">
+        <div>
+          <h1 class="hs-section-title">Track Your Order</h1>
+          <p class="hs-section-subtitle">
+            Enter your email to check order status and view history.
+          </p>
+        </div>
+      </div>
+
+      <form
+        class="hs-hero-search"
+        onsubmit="event.preventDefault(); fakeTrack();"
+        style="max-width: 600px; margin-bottom: 24px;"
+      >
+        <input
+          id="trackEmail"
+          type="email"
+          class="hs-input hs-input--hero"
+          placeholder="your@email.com"
+          required
+        />
+        <button type="submit" class="hs-button hs-button--accent">Search</button>
+      </form>
+
+      <section
+        id="trackResult"
+        style="
+          margin-top: 12px;
+          border-radius: 18px;
+          padding: 36px 20px;
+          background: rgba(15, 23, 42, 0.95);
+          border: 1px solid rgba(148, 163, 184, 0.3);
+          text-align: center;
+        "
+      >
+        <div style="font-size: 2.4rem; margin-bottom: 8px;">🔍</div>
+        <h2 style="margin-bottom: 4px;">Enter your email</h2>
+        <p class="hs-card-text hs-card-text--muted">
+          Enter your email address above and click Search to view your orders.
+        </p>
+      </section>
+    </section>
+  </main>
+
+  <footer class="hs-footer">
+    <p>© 2025 IN OTT ZONE • Secure &amp; Trusted Since 2023</p>
+  </footer>
+
+  <script>
+    function fakeTrack() {
+      const email = document.getElementById("trackEmail").value;
+      const result = document.getElementById("trackResult");
+      result.innerHTML =
+        "<h2 style='margin-bottom:6px;'>Orders for " +
+        email +
+        "</h2>" +
+        "<p class='hs-card-text hs-card-text--muted'>Tracking UI is ready. Hook this up to your backend later.</p>";
+    }
+  </script>
+</body>
+</html>
