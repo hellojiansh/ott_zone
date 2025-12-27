@@ -56,31 +56,128 @@
       </div>
 
       <div class="hs-payment-grid">
+        <!-- International customers card -->
         <div class="hs-payment-card hs-payment-card--intl">
-          <h3 class="hs-card-title">International Customers</h3>
-          <p class="hs-card-text">
-            Different rates and payment methods are available for international orders.
-            Contact us directly for pricing and available payment options.
-          </p>
+          <div class="hs-payment-card-header">
+            <span class="hs-payment-icon">🌍</span>
+            <div>
+              <h3 class="hs-card-title">International Customers</h3>
+              <p class="hs-card-text hs-card-text--muted">
+                Different rates and payment methods available for international orders.
+                Contact us directly for pricing and available payment options.
+              </p>
+            </div>
+          </div>
           <div class="hs-payment-actions">
             <button class="hs-button hs-button--whatsapp">WhatsApp for Rates</button>
             <button class="hs-button hs-button--telegram">Telegram for Rates</button>
           </div>
         </div>
 
+        <!-- Scan & Pay card -->
         <div class="hs-payment-card">
-          <h3 class="hs-card-title">Scan &amp; Pay</h3>
-          <p class="hs-card-text">Scan QR code with any UPI app.</p>
-          <div class="hs-payment-qr-placeholder">
-            <span class="hs-payment-qr-label">UPI QR Code</span>
+          <div class="hs-payment-card-header">
+            <span class="hs-payment-icon">💳</span>
+            <div>
+              <h3 class="hs-card-title">Scan &amp; Pay</h3>
+              <p class="hs-card-text hs-card-text--muted">
+                Scan QR code with any UPI app.
+              </p>
+            </div>
           </div>
-          <p class="hs-card-text hs-card-text--muted">
-            UPI ID: <span class="hs-highlight">narendrmdoe@upi</span>
-          </p>
+
+          <div class="hs-payment-qr-box">
+            <div class="hs-payment-qr-placeholder">
+              <span class="hs-payment-qr-label">UPI QR Code</span>
+            </div>
+            <div class="hs-upi-id-row">
+              <div class="hs-upi-id-label">UPI ID</div>
+              <div class="hs-upi-id-input">
+                <span id="upiIdText">narendrmodi@ptyes</span>
+                <button type="button" class="hs-button hs-button--copy" onclick="copyUpiId()">
+                  Copy
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="hs-upi-apps">
+            <span class="hs-upi-app">GPay</span>
+            <span class="hs-upi-app">PhonePe</span>
+            <span class="hs-upi-app">Paytm</span>
+            <span class="hs-upi-app">BHIM</span>
+            <span class="hs-upi-app">Amazon Pay</span>
+            <span class="hs-upi-app">Any UPI</span>
+          </div>
         </div>
       </div>
+
+      <!-- Crypto payment card -->
+      <section class="hs-section hs-section--payment-extra">
+        <div class="hs-payment-card">
+          <div class="hs-payment-card-header">
+            <span class="hs-payment-icon">Ƀ</span>
+            <div>
+              <h3 class="hs-card-title">Crypto Payment</h3>
+              <p class="hs-card-text hs-card-text--muted">
+                Bitcoin, USDT &amp; other cryptocurrencies
+              </p>
+            </div>
+          </div>
+          <p class="hs-card-text" style="margin-top: 10px;">
+            For cryptocurrency payments, please contact us directly. We accept Bitcoin,
+            USDT, and other major cryptocurrencies.
+          </p>
+          <div class="hs-payment-actions" style="margin-top: 14px;">
+            <button class="hs-button hs-button--whatsapp">WhatsApp</button>
+            <button class="hs-button hs-button--telegram">Telegram</button>
+          </div>
+          <div class="hs-crypto-tags">
+            <span class="hs-upi-app">Bitcoin (BTC)</span>
+            <span class="hs-upi-app">USDT (TRC20)</span>
+            <span class="hs-upi-app">Ethereum</span>
+            <span class="hs-upi-app">Other Crypto</span>
+          </div>
+        </div>
+
+        <!-- Payment instructions card -->
+        <div class="hs-payment-card">
+          <div class="hs-payment-card-header">
+            <span class="hs-payment-icon">🧾</span>
+            <div>
+              <h3 class="hs-card-title">Payment Instructions</h3>
+              <p class="hs-card-text hs-card-text--muted">
+                Simple steps to complete your order securely.
+              </p>
+            </div>
+          </div>
+
+          <ol class="hs-payment-steps">
+            <li>Place your order on our website.</li>
+            <li>Copy the UPI ID above or contact us for crypto.</li>
+            <li>Send the exact amount mentioned in your order.</li>
+            <li>Take a screenshot of successful payment.</li>
+            <li>Share screenshot on WhatsApp or Telegram for confirmation.</li>
+          </ol>
+
+          <div class="hs-payment-actions" style="margin-top: 14px;">
+            <button class="hs-button hs-button--whatsapp">WhatsApp</button>
+            <button class="hs-button hs-button--telegram">Telegram</button>
+          </div>
+        </div>
+      </section>
     </section>
   </main>
+
+  <script>
+    function copyUpiId() {
+      const text = document.getElementById("upiIdText").textContent;
+      navigator.clipboard.writeText(text).then(
+        () => alert("UPI ID copied: " + text),
+        () => alert("Unable to copy UPI ID")
+      );
+    }
+  </script>
 
   <footer class="hs-footer">
     <p>© 2025 IN OTT ZONE • Secure &amp; Trusted Since 2023</p>
