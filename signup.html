@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up - OTTZONE SERVICES</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="hs-body">
+  <div class="hs-bg-grid"></div>
+  <div class="hs-particles">
+    <span class="hs-particle hs-p1"></span>
+    <span class="hs-particle hs-p2"></span>
+    <span class="hs-particle hs-p3"></span>
+    <span class="hs-particle hs-p4"></span>
+    <span class="hs-particle hs-p5"></span>
+    <span class="hs-butterfly b1"></span>
+    <span class="hs-butterfly b2"></span>
+    <span class="hs-butterfly b3"></span>
+    <span class="hs-butterfly b4"></span>
+  </div>
+
+  <main class="hs-auth-main">
+    <div class="hs-auth-wrapper">
+      <a href="index.html" class="hs-back-link">
+        <span class="hs-back-icon">←</span>
+        <span>Back to Home</span>
+      </a>
+
+      <section class="hs-auth-card">
+        <div class="hs-auth-card-inner">
+          <div class="hs-auth-brand">
+            IN <span>OTT</span> ZONE
+          </div>
+          <h1 class="hs-auth-title">Create Account</h1>
+          <p class="hs-auth-subtitle">
+            Sign up to access all deals and manage your orders.
+          </p>
+
+          <form
+            class="hs-auth-form"
+            onsubmit="event.preventDefault(); fakeSignup();"
+          >
+            <div class="hs-form-group">
+              <label class="hs-form-label" for="name">Full Name</label>
+              <div class="hs-input-wrapper">
+                <span class="hs-input-icon-left">🧑</span>
+                <input
+                  id="name"
+                  type="text"
+                  class="hs-input hs-input--pill"
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label class="hs-form-label" for="signupEmail">Email</label>
+              <div class="hs-input-wrapper">
+                <span class="hs-input-icon-left">📧</span>
+                <input
+                  id="signupEmail"
+                  type="email"
+                  class="hs-input hs-input--pill"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="hs-form-group">
+              <label class="hs-form-label" for="signupPassword">Password</label>
+              <div class="hs-input-wrapper">
+                <span class="hs-input-icon-left">🔒</span>
+                <input
+                  id="signupPassword"
+                  type="password"
+                  class="hs-input hs-input--pill"
+                  placeholder="Create a password"
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="hs-button hs-button--primary hs-button--block">
+              Create Account
+            </button>
+
+            <p class="hs-auth-footer-text">
+              <span>Already have an account?</span>
+              <a href="signin.html" class="hs-link-accent">Sign in</a>
+            </p>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function fakeSignup() {
+      const email = document.getElementById("signupEmail").value;
+      alert("Sign up clicked for: " + email + "\\nHook this into your auth later.");
+    }
+  </script>
+</body>
+</html>
